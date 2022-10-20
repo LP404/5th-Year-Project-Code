@@ -11,8 +11,9 @@ for i in range(len(files)):
     
     vars()[files[i]] = np.loadtxt(open(path + "\\" + files[i] + ".txt", "rb"), delimiter=",",skiprows = 2).T
     
-    plt.figure(i)
-    plt.plot(vars()[files[i]][0],vars()[files[i]][1])
+    plt.figure(1)
+    plt.plot(vars()[files[i]][0],vars()[files[i]][1],label = files[i])
     plt.xlabel('Wavelength (nm)')
     plt.ylabel('Transmittance')
     plt.title(files[i])
+    plt.legend()
