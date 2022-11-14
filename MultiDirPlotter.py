@@ -32,24 +32,25 @@ for i in range(len(dirs)):
         plt.plot(vars()[vars()['files'+dirs[i]][j]][0],vars()[vars()['files'+dirs[i]][j]][1],label = vars()['files'+dirs[i]][j])
         plt.plot(vars()[vars()['files'+dirs[i]][j]][0],vars()[vars()['files'+dirs[i]][j]+'newY'],label = vars()['files'+dirs[i]][j]+' filtered')
         Point = np.where(np.gradient(vars()[vars()['files'+dirs[i]][j]+'newY']) == max(np.gradient(vars()[vars()['files'+dirs[i]][j]+'newY'])))[0][0]
-        m,c,err = F.LineValFinder(vars()[vars()['files'+dirs[i]][j]][0],vars()[vars()['files'+dirs[i]][j]+'newY'],10)
-        yFit = m * vars()[vars()['files'+dirs[i]][j]][0] + c
-        Contstraint = (yFit >= 0) & (yFit <= max(vars()[vars()['files'+dirs[i]][j]+'newY']))
+        # m,c,err = F.LineValFinder(vars()[vars()['files'+dirs[i]][j]][0],vars()[vars()['files'+dirs[i]][j]+'newY'],10)
+        # yFit = m * vars()[vars()['files'+dirs[i]][j]][0] + c
+        # Contstraint = (yFit >= 0) & (yFit <= max(vars()[vars()['files'+dirs[i]][j]+'newY']))
         
-        line1start = (min(vars()[vars()['files'+dirs[i]][j]][0]),0)
-        line1end = (max(vars()[vars()['files'+dirs[i]][j]][0]),0)    
+        # line1start = (min(vars()[vars()['files'+dirs[i]][j]][0]),0)
+        # line1end = (max(vars()[vars()['files'+dirs[i]][j]][0]),0)    
         
-        line2start = (min(vars()[vars()['files'+dirs[i]][j]][0][Contstraint]),min(yFit[Contstraint]))
-        line2end = (max(vars()[vars()['files'+dirs[i]][j]][0][Contstraint]),max(yFit[Contstraint]))
+        # line2start = (min(vars()[vars()['files'+dirs[i]][j]][0][Contstraint]),min(yFit[Contstraint]))
+        # line2end = (max(vars()[vars()['files'+dirs[i]][j]][0][Contstraint]),max(yFit[Contstraint]))
     
-        vars()[vars()['files'+dirs[i]][j]+'Intercept'] = F.LineIntersection((line1start,line1end),(line2start,line2end))    
+        # vars()[vars()['files'+dirs[i]][j]+'Intercept'] = F.LineIntersection((line1start,line1end),(line2start,line2end))    
         
         # plt.plot(vars()[vars()['files'+dirs[i]][j]][0][Contstraint],yFit[Contstraint],label = 'Intercept = '+str(np.around(vars()[vars()['files'+dirs[i]][j]+'Intercept'][0],2)))
         plt.xlabel('Wavelength (nm)')
-        bgEn = (3e8 * 6.63e-34)/(vars()[vars()['files'+dirs[i]][j]+'Intercept'][0]*1e-9)
-        bgeV =  np.around((6.242e18 * bgEn),2)
-        plt.ylabel('Transmittance, E_bg =' + str(bgeV)+'eV')
-        plt.title(vars()['files'+dirs[i]][j] + " " + dirs[i])
+        # bgEn = (3e8 * 6.63e-34)/(vars()[vars()['files'+dirs[i]][j]+'Intercept'][0]*1e-9)
+        # bgeV =  np.around((6.242e18 * bgEn),2)
+        # plt.ylabel('Transmittance, E_bg =' + str(bgeV)+'eV')
+        plt.ylabel('Transmittance')        
+        plt.title(vars()['files'+dirs[i]][j][3:-3] + " " + dirs[i])
         plt.legend()
         
 
