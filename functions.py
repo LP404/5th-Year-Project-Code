@@ -3,10 +3,12 @@ from scipy.signal import lfilter, lfilter_zi, filtfilt, butter
 from scipy import stats
 
 
-def LineValFinder(xArray,yArray,guage):
+def LineValFinder(xArray,yArray,guage,abso):
     
-
-    point = np.where(np.gradient(yArray) == max(np.gradient(yArray)))[0][0]
+    if abso == True:
+        point = np.where(np.gradient(yArray) == min(np.gradient(yArray)))[0][0]      
+    else:
+        point = np.where(np.gradient(yArray) == max(np.gradient(yArray)))[0][0]
     xSec = xArray[point - guage : point + guage]
     ySec = yArray[point - guage : point + guage] 
      
