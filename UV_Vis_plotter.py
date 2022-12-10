@@ -45,7 +45,7 @@ path1, dirs1, files1 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plo
 path2, dirs2, files2 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UV-Vis\\Reflectance'))
 
 
-
+C:\Users\User\Documents\Uni\Fifth Year\Project\5th-Year-Project-Code\UVVisLineDir\Huimin
 
 for i in range(len(files1)):
     files1[i] = files1[i][:-len(suffix)] 
