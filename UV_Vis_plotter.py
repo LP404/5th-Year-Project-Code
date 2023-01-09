@@ -34,17 +34,15 @@ suffix = ".txt"
 Val1, Val2 = 3, 0.035
 h = 6.63e-34
 c = 3e8
-# LamMax = 800
-# LamMin = 400
+LamMax = 800
+LamMin = 400
 
-LamMax = 688
-LamMin = 575
+# LamMax = 750
+# LamMin = 575
 
 path, dirs, files = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UV-Vis\\Transmittance\\Sample'))
 path1, dirs1, files1 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UV-Vis\\Transmittance\\Substrate'))
 path2, dirs2, files2 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UV-Vis\\Reflectance'))
-
-
 
 
 for i in range(len(files1)):
@@ -146,23 +144,23 @@ for i in range(len(files)):
     
     vars()[files[i]+'_CorrectedTrans'] = vars()[files[i]+'newY']/vars()[files1[0]+'newY']
     
-    # plt.figure(100+i)
-    # plt.plot(vars()[files[i]][0],(vars()[files[i]+'_CorrectedTrans'])*100)
-    # plt.xlabel('Wavelength (nm)')
-    # plt.ylabel('Transmittance') 
-    # plt.title(SamName[i]+' Corrected')
+    plt.figure(100+i)
+    plt.plot(vars()[files[i]][0],(vars()[files[i]+'_CorrectedTrans'])*100)
+    plt.xlabel('Wavelength (nm)')
+    plt.ylabel('Transmittance') 
+    plt.title(SamName[i]+' Transmittance')
     
     
     #hv is identical for all measuremnts 
     hv = ((h * c) / (vars()[files[0]][0] * 1e-9)) * 6.242e18
-    vars()[files[i]+' alpha'] = (np.log((1/vars()[files[i]+'_CorrectedTrans']))) / 7e-5
+    # vars()[files[i]+' alpha'] = (np.log((1/vars()[files[i]+'_CorrectedTrans']))) / 7e-5
     
     
     vars()[files[i]+' alpha1'] = np.log( ( ((1- vars()[files2[i]+'newYNorm'])) / vars()[files[i]+'_CorrectedTrans']) ) / 7e-5 
     
-    vars()[files[i]+' alpha2'] = np.log(( ((1- vars()[files2[i]+'newYNorm'])**2) / (2 * vars()[files[i]+'_CorrectedTrans'])) + np.sqrt( (( ((1- vars()[files[i]+'_CorrectedTrans'])**4) / (4 * vars()[files[i]+'_CorrectedTrans']**2)) + (vars()[files2[i]+'newYNorm']**2)) )) / 7e-5
+    # vars()[files[i]+' alpha2'] = np.log(( ((1- vars()[files2[i]+'newYNorm'])**2) / (2 * vars()[files[i]+'_CorrectedTrans'])) + np.sqrt( (( ((1- vars()[files[i]+'_CorrectedTrans'])**4) / (4 * vars()[files[i]+'_CorrectedTrans']**2)) + (vars()[files2[i]+'newYNorm']**2)) )) / 7e-5
 
-    vars()[files[i]+' kub'] = (1 - vars()[files2[i]+'newY'])**2 / (2 * vars()[files2[i]+'newY'])  
+    # vars()[files[i]+' kub'] = (1 - vars()[files2[i]+'newY'])**2 / (2 * vars()[files2[i]+'newY'])  
 
 
 
@@ -180,12 +178,23 @@ expval = 2
 #     plt.title(SamName[i] + " Absorbtion")
 
 
+# path3, dirs3, files3 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UVVisLineDir\\Ivy'))
+
+# for i in range(len(files3)): 
+#     files3[i] = files3[i][:-len(suffix)] 
+#     vars()[files3[i]] = np.loadtxt(open(path3 + "\\" + files3[i] + '.txt', "rb"), delimiter=",")
+
+
+for i in range(len(files)):
+    vars()[files[i]+'FinalY'] = (hv*vars()[files[i]+' alpha1'])**expval
+    
+
+
 for i in range(len(files)):
     plt.figure(300 + i)
-    # plt.xlim([1.4,3.1])
-    # plt.xticks(np.arange(1.4,3.2,0.1))
+    plt.xlim([1.4,3.1])
+    plt.xticks(np.arange(1.4,3.2,0.1))
     plt.rc('xtick', labelsize=8)
-    vars()[files[i]+'FinalY'] = (hv*vars()[files[i]+' alpha1'])**expval
  
     Point = np.where(np.gradient(vars()[files[i]+'FinalY']) == min(np.gradient(vars()[files[i]+'FinalY'])))[0][0]
     
@@ -203,10 +212,13 @@ for i in range(len(files)):
     
     plt.plot(hv[Contstraint],yFit[Contstraint],label = 'Intercept = '+str(np.around(vars()[files[i]+'Intercept'][0],2)))
     plt.ylabel('Transmittance, E_bg =' + str(vars()[files[i]+'Intercept'])+'eV')        
- 
+  
+    vars()[files[i]+'hvCOnt'] = hv[Contstraint]
+    vars()[files[i]+'YfitCon'] = yFit[Contstraint]
+  
     
- 
     plt.plot(hv,vars()[files[i]+'FinalY'])
+    # plt.plot(vars()[files3[i]][0],vars()[files3[i]][1])
     plt.scatter(hv[Point],vars()[files[i]+'FinalY'][Point])
     plt.xlabel('hv (eV)')
     plt.ylabel('αhv^2 (cm^-1 eV)^2')
@@ -215,19 +227,71 @@ for i in range(len(files)):
     plt.legend()
     plt.plot()
 
-    np.savetxt(str(SamName[i])+'_MCErrLinedata.txt',(m,c,err), delimiter=',')   
+    np.savetxt(str(SamName[i])+'_Linedata.txt',(hv[Contstraint],yFit[Contstraint]), delimiter=',')   
 
-# for i in range(len(files)):
-#     fig,ax1 = plt.subplots()
-#     left, bottom,width,height = [0.55,0.2,0.3,0.3]
-#     ax2 = fig.add_axes([left, bottom,width,height])
-#     ax1.plot(hv,vars()[files[i]+' alpha1'])
-#     ax2.plot(hv,vars()[files[i]+'FinalY'])
-#     ax1.set_xlabel('hv (eV)')
-#     ax1.set_ylabel('α (cm^-1)')
-#     ax1.set_title(SamName[i] + ' Absorbtion')
-#     ax2.set_title('Absorbtion squared', fontsize = 7)
-#     ax2.set_ylabel('αhv^2 (cm^-1 eV)^2',fontsize = 7)
+if len(files) == 4 : 
+    path3, dirs3, files3 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UVVisLineDir\\Huimin'))
+ 
+    for i in range(len(files3)): 
+        files3[i] = files3[i][:-len(suffix)] 
+        vars()[files3[i]] = np.loadtxt(open(path3 + "\\" + files3[i] + '.txt', "rb"),delimiter = ',')
+        
+        
+    
+
+    for i in range(len(files)):
+        
+        fig,ax1 = plt.subplots()
+        left, bottom,width,height = [0.55,0.2,0.3,0.3]
+        ax2 = fig.add_axes([left, bottom,width,height])
+        ax1.plot(hv,vars()[files[i]+' alpha1'])
+        ax2.plot(hv,vars()[files[i]+'FinalY'])
+        ax2.plot(vars()[files3[i]][0],vars()[files3[i]][1])
+        ax1.set_xlabel('hv (eV)')
+        ax1.set_ylabel('α (cm^-1)')
+        ax1.set_title(SamName[i] + ' Absorbtion')
+        ax2.set_title('Absorbtion squared', fontsize = 7)
+        ax2.set_ylabel('αhv^2 (cm^-1 eV)^2',fontsize = 7)
+
+
+
+elif len(files) == 8:
+    path3, dirs3, files3 = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UVVisLineDir\\Ivy'))
+
+    for i in range(len(files3)): 
+        files3[i] = files3[i][:-len(suffix)] 
+        vars()[files3[i]] = np.loadtxt(open(path3 + "\\" + files3[i] + '.txt', "rb"),delimiter = ',')
+
+
+    for i in range(len(files)):
+
+        
+        fig,ax1 = plt.subplots()
+        left, bottom,width,height = [0.55,0.2,0.3,0.3]
+        ax2 = fig.add_axes([left, bottom,width,height])
+        ax1.plot(hv,vars()[files[i]+' alpha1'])
+        ax2.plot(hv,vars()[files[i]+'FinalY'])
+        ax2.plot(vars()[files3[i]][0],vars()[files3[i]][1])
+        ax1.set_xlabel('hv (eV)')
+        ax1.set_ylabel('α (cm^-1)')
+        ax1.set_title(SamName[i] + ' Absorbtion')
+        ax2.set_title('Absorbtion squared', fontsize = 7)
+        ax2.set_ylabel('αhv^2 (cm^-1 eV)^2',fontsize = 7)
+
+
+
+else:
+    for i in range(len(files)):
+        fig,ax1 = plt.subplots()
+        left, bottom,width,height = [0.55,0.2,0.3,0.3]
+        ax2 = fig.add_axes([left, bottom,width,height])
+        ax1.plot(hv,vars()[files[i]+' alpha1'])
+        ax2.plot(hv,vars()[files[i]+'FinalY'])
+        ax1.set_xlabel('hv (eV)')
+        ax1.set_ylabel('α (cm^-1)')
+        ax1.set_title(SamName[i] + ' Absorbtion')
+        ax2.set_title('Absorbtion squared', fontsize = 7)
+        ax2.set_ylabel('αhv^2 (cm^-1 eV)^2',fontsize = 7)
 
     
 # for i in range(len(files)):
