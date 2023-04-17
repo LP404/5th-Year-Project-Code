@@ -95,11 +95,15 @@ SamBin = list(filter(None,SamBin))
 for i in range(len(SamBin)):
     for j in range(len(SamBin[i])):
         plt.figure(i+1*200)
-        plt.title(prefixDict[SamBin[i][j][2]] + ' Transmittance')
+        plt.rc('xtick', labelsize=12)    # fontsize of the tick labels
+        plt.rc('ytick', labelsize=12)    # fontsize of the tick labels
+        #plt.title(prefixDict[SamBin[i][j][2]] + ' Transmittance')
         plt.ylabel('Transmittance (%)')
-        plt.xlabel('wavelength (nm)')
+        plt.xlabel('Wavelength (nm)')
+        plt.rc('axes', labelsize=12) 
         plt.plot(SamBin[i][j][0],SamBin[i][j][1], label = SamBin[i][j][3], color = SamBin[i][j][4])
         plt.legend()
+        plt.savefig(prefixDict[SamBin[i][j][2]]+"Multimyimg.svg",bbox_inches="tight")
         
         
 

@@ -80,6 +80,9 @@ for i in range(len(files)):
     plt.plot(vars()[files3[i]][0],vars()[files3[i]+'newY'],label = 'Post Exposure ' +  samName[i]+' filtered')
 
     plt.ylabel('Transmittance')
-    plt.title(samName[i] + ' Transmittance')
+    plt.xlabel('Wavelength (nm)')
+    plt.rc('xtick', labelsize=12)    # fontsize of the tick labels
+    plt.rc('ytick', labelsize=12)    # fontsize of the tick labels
     plt.legend()
+    plt.savefig(files[i]+"myimg.svg",bbox_inches="tight")
     
