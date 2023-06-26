@@ -37,11 +37,7 @@ c = 3e8
 LamMax = 800
 LamMin = 400
 
-<<<<<<< Updated upstream
 # LamMax = 750
-=======
-# LamMax = 688
->>>>>>> Stashed changes
 # LamMin = 575
 
 path, dirs, files = next(os.walk(os.path.dirname(os.path.realpath('UV_Vis_plotter.py')) + '\\UV-Vis\\Transmittance\\Sample'))
@@ -159,20 +155,11 @@ for i in range(len(files)):
     
     #hv is identical for all measuremnts 
     hv = ((h * c) / (vars()[files[0]][0] * 1e-9)) * 6.242e18
-<<<<<<< Updated upstream
     # vars()[files[i]+' alpha'] = (np.log((1/vars()[files[i]+'_CorrectedTrans']))) / 7e-5
-=======
-    vars()[files[i]+' alpha'] = (np.log((1/vars()[files[i]+'_CorrectedTrans']))) / thickness
->>>>>>> Stashed changes
-    
     
     vars()[files[i]+' alpha1'] = np.log( ( ((1- vars()[files2[i]+'newYNorm'])) / vars()[files[i]+'_CorrectedTrans']) ) / thickness
     
-<<<<<<< Updated upstream
     # vars()[files[i]+' alpha2'] = np.log(( ((1- vars()[files2[i]+'newYNorm'])**2) / (2 * vars()[files[i]+'_CorrectedTrans'])) + np.sqrt( (( ((1- vars()[files[i]+'_CorrectedTrans'])**4) / (4 * vars()[files[i]+'_CorrectedTrans']**2)) + (vars()[files2[i]+'newYNorm']**2)) )) / 7e-5
-=======
-    vars()[files[i]+' alpha2'] = np.log(( ((1- vars()[files2[i]+'newYNorm'])**2) / (2 * vars()[files[i]+'_CorrectedTrans'])) + np.sqrt( (( ((1- vars()[files[i]+'_CorrectedTrans'])**4) / (4 * vars()[files[i]+'_CorrectedTrans']**2)) + (vars()[files2[i]+'newYNorm']**2)) )) / thickness
->>>>>>> Stashed changes
 
     # vars()[files[i]+' kub'] = (1 - vars()[files2[i]+'newY'])**2 / (2 * vars()[files2[i]+'newY'])  
 
@@ -232,7 +219,7 @@ for i in range(len(files)):
     vars()[files[i]+'hvConst'] = hv[Contstraint]
     vars()[files[i]+'yFitConst'] = yFit[Contstraint]
     
-<<<<<<< Updated upstream
+
     plt.plot(hv[Contstraint],yFit[Contstraint],label = 'Intercept = '+str(np.around(vars()[files[i]+'Intercept'][0],2)))
     plt.ylabel('Transmittance, E_bg =' + str(vars()[files[i]+'Intercept'])+'eV')        
   
@@ -315,7 +302,7 @@ else:
         ax1.set_title(SamName[i] + ' Absorbtion')
         ax2.set_title('Absorbtion squared', fontsize = 7)
         ax2.set_ylabel('αhv^2 (cm^-1 eV)^2',fontsize = 7)
-=======
+
     # plt.plot(vars()[files[i]+'hvConst'],vars()[files[i]+'yFitConst'],label = 'Intercept = '+str(np.around(vars()[files[i]+'Intercept'][0],2)))
     # plt.ylabel('Transmittance, E_bg =' + str(vars()[files[i]+'Intercept'])+'eV')        
  
@@ -350,9 +337,7 @@ for i in range(len(files)):
     plt.rc('xtick', labelsize=12)    # fontsize of the tick labels
     plt.rc('ytick', labelsize=12)    # fontsize of the tick labels
     plt.savefig(files[i]+"myimg.svg",bbox_inches="tight")
-    
 
->>>>>>> Stashed changes
 
     
 # for i in range(len(files)):
